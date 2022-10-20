@@ -16,7 +16,7 @@ def hex_zfill(intval):
     hexvalue=hex(intval)
     return '0x' + str(hexvalue)[2:].zfill(4)
 
-os.chdir(os.path.dirname(sys.argv[0]))
+#os.chdir(os.path.dirname(sys.argv[0]))
 
 # CONFIG
 configParser = configparser.RawConfigParser()
@@ -28,7 +28,7 @@ inverter_port=int(configParser.get('SofarInverter', 'inverter_port'))
 inverter_sn=int(configParser.get('SofarInverter', 'inverter_sn'))
 verbose=configParser.get('SofarInverter', 'verbose')
 # END CONFIG
-loop = ['0x0480', '0x04BC', '0x0580','0x05B3', '0x680', '0x069B']
+loop = ['0x0000', '0x0027', '0x0400', '0x043A', '0x0480', '0x04BC', '0x0580','0x05B3', '0x680', '0x069B']
 while loop:
     
     pfin=int(loop.pop(-1),0)
@@ -102,9 +102,13 @@ while loop:
      p1=56+(a*4)
      p2=60+(a*4)
      responsereg=response[p1:p2]
-     # print(p1, p2, responsereg)
+     #print(p1, p2, responsereg)
      hexpos=str("0x") + str(hex(a+pini)[2:].zfill(4)).upper()
      if verbose=="1": print("Register:",hexpos+" , value: hex:" +str(responsereg) + "dev:"+str(int(str(responsereg),16)*0.01));
+     if(str(hexpos) == "0x0484"): print("Frequency_Grid:"+str(int(str(responsereg),16)*0.01) + "Hz")
+     if(str(hexpos) == "0x0485"): print("ActivePower_Output_Total:"+str(int(str(responsereg),16)*0.01) + "kW")
+     if(str(hexpos) == "0x0486"): print("ReactivePower_Output_Total:"+str(int(str(responsereg),16)*0.01) + "kW")
+     if(str(hexpos) == "0x0487"): print("ApparentPower_Output_Total:"+str(int(str(responsereg),16)*0.01) + "kW")
      if(str(hexpos) == "0x048D"): print("R:"+str(int(str(responsereg),16)*0.1) + "V")
      if(str(hexpos) == "0x048E"): print("R:"+str(int(str(responsereg),16)*0.01) + "A")
      if(str(hexpos) == "0x0498"): print("S:"+str(int(str(responsereg),16)*0.1) + "V")
@@ -114,6 +118,11 @@ while loop:
      if(str(hexpos) == "0x0584"): print("P1:"+str(int(str(responsereg),16)*0.1) + "V")
      if(str(hexpos) == "0x0585"): print("P1:"+str(int(str(responsereg),16)*0.01) + "A")
      if(str(hexpos) == "0x0586"): print("P1:"+str(int(str(responsereg),16)*0.01) + "kW")
+     if(str(hexpos) == "0x0587"): print("P2:"+str(int(str(responsereg),16)*0.1) + "V")
+     if(str(hexpos) == "0x0588"): print("P2:"+str(int(str(responsereg),16)*0.01) + "A")
+     if(str(hexpos) == "0x0589"): print("P2:"+str(int(str(responsereg),16)*0.01) + "kW")
      if(str(hexpos) == "0x0685"): print("PV_Generation_Today:"+str(int(str(responsereg),16)*0.01) + "kW") #this use 16bit not 32bit
      if(str(hexpos) == "0x0687"): print("PV_Generation_Total:"+str(int(str(responsereg),16)*0.1) + "kW") #this use 16bit not 32bit
+     if(str(hexpos) == "0x0689"): print("Load_Consumption_Today:"+str(int(str(responsereg),16)*0.01) + "kW") #this use 16bit not 32bit
+     if(str(hexpos) == "0x068B"): print("Load_Consumption_Total:"+str(int(str(responsereg),16)*0.1) + "kW") #this use 16bit not 32bit
      a+=1
